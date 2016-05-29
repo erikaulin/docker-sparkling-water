@@ -1,0 +1,25 @@
+version: '2'
+services:
+  spark-master:
+    image: erikaulin/sparklingwater
+    container_name: spark-master
+    ports:
+      - '8080-8081:8080-8081'
+      - '54321-54333:54321-54333'
+      - '7077:7077'
+      - '8888:8888'
+      - '4040:4040'
+      - '7001-7006:7001-7006'
+    command: /start-master.sh
+    command: tail -f /var/log/syslog
+  spark-worker:
+    image: erikaulin/sparklingwater
+    ports:
+      - '8080-8081:8080-8081'
+      - '7077:7077'
+      - '8888:8888'
+      - '4040:4040'
+      - '7001-7006:7001-7006'
+    links: spark-master
+    command: /start-worker.sh
+    command: tail -f /var/log/syslog

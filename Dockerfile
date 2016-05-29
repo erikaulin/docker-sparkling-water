@@ -5,15 +5,11 @@ MAINTAINER Erik Aulin <erik@aulin.co>
 # add a post-invoke hook to dpkg which deletes cached deb files
 # update the sources.list
 # update/dist-upgrade
-# clear the caches
 RUN \
   echo 'DPkg::Post-Invoke {"/bin/rm -f /var/cache/apt/archives/*.deb || true";};' | tee /etc/apt/apt.conf.d/no-cache && \
   echo "deb http://ap-northeast-1.ec2.archive.ubuntu.com/ubuntu trusty main universe" >> /etc/apt/sources.list && \
   apt-get update -q -y && \
-  apt-get dist-upgrade -y && \
-  apt-get clean && \
-  rm -rf /var/cache/apt/*
-
+  apt-get dist-upgrade -y
 
 # Install Oracle Java 7
 RUN \
@@ -33,6 +29,11 @@ RUN apt-get -y install --no-install-recommends \
   sudo \
   openssh-server \
   unzip
+
+# Clear the caches
+RUN \
+  apt-get clean && \
+  rm -rf /var/cache/apt/*
 
 # Install Spark 1.6.1
 RUN curl -s https://archive.apache.org/dist/spark/spark-1.6.1/spark-1.6.1-bin-cdh4.tgz | tar -xz -C /opt && \
