@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+##FROM ubuntu:14.04
 
 MAINTAINER Erik Aulin <erik@aulin.co>
 
@@ -30,10 +30,8 @@ RUN apt-get -y install --no-install-recommends \
   openssh-server \
   unzip
 
-# Clear the caches
-RUN \
-  apt-get clean && \
-  rm -rf /var/cache/apt/*
+# Clean up APT when done.
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/apt/*
 
 # Install Spark 1.6.1
 RUN curl -s https://archive.apache.org/dist/spark/spark-1.6.1/spark-1.6.1-bin-cdh4.tgz | tar -xz -C /opt && \
